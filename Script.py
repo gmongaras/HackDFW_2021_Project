@@ -120,4 +120,22 @@ def transcribe_audio(infile, outfile):
     return
 
 
-transcribe_audio('test2.mp3', 'test2_trans.json')
+
+def upload_recording(infile):
+    """
+    Uploads an MP4 file to an S3 bucket.
+
+    :param infile: The name of the file to send to the bucket
+    """
+
+    bucketName = 'hackdfw2021storage'
+
+    # Upload the file
+    print('Uploading file')
+    upload_file(infile, bucketName)
+    print('File uploaded')
+
+
+
+#transcribe_audio('test2.mp3', 'test2_trans.json')
+upload_recording('test2.mp4')
