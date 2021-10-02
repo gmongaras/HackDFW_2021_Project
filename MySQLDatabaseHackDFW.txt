@@ -10,7 +10,7 @@ CREATE TABLE recordings(RecordingID int NOT NULL AUTO_INCREMENT PRIMARY KEY, aud
 INSERT INTO recordings(audio, text, ID)
     -> VALUES('@rds_file_path','such as: D:\S3\<filename in s3>', 1);
 	
-//Link to information on integrating RDS with Amazon S3
+//Link to information on integrating RDS with Amazon S3 for files
 https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/User.SQLServer.Options.S3-integration.html
 
 //Sample statements for certain operations
