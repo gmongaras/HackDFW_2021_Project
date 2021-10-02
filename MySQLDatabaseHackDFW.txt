@@ -1,0 +1,25 @@
+//SQL Statements to create a database with 2 tables->users and recordings
+
+//Includes sample insert statements
+
+CREATE TABLE users(ID int NOT NULL AUTO_INCREMENT PRIMARY KEY, username varchar(255) NOT NULL, password varchar(255) NOT NULL, email varchar(255));
+INSERT INTO users(username, password, email)
+    -> VALUES('jdoe', 'password', 'jdoe@gmail.com');
+
+CREATE TABLE recordings(RecordingID int NOT NULL AUTO_INCREMENT PRIMARY KEY, audio nvarchar(255), text nvarchar(255), ID int, FOREIGN KEY(ID) REFERENCES users(ID));
+INSERT INTO recordings(audio, text, ID)
+    -> VALUES('@rds_file_path','such as: D:\S3\<filename in s3>', 1);
+	
+//Link to information on integrating RDS with Amazon S3 for files
+https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/User.SQLServer.Options.S3-integration.html
+
+//Sample statements for certain operations
+To check login credentials:
+	select * from users where username = "username" && password = "password";
+	If it returns an empty set, then invalid username/password
+	
+To select all recordings from a certain teacher:
+	select audio, text from users u join recordings r on u.ID = r.ID where username = 'jdoe';
+	
+	
+	
