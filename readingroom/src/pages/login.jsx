@@ -3,28 +3,30 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField'; 
 import { useFormControl } from '@mui/material/FormControl';
 import ReactDOM from 'react-dom';
-import { ReactComponent as ReadingRoomLogo} from '../logo/ReadingRoomLogo.svg';
-import Logo from '../logo/ReadingRoomLogo.svg';
+import Logo from '../logo/ReadingRoomLogoNoBackground.svg';
 import './login.css'; 
-import OrigamiFox from '../origami/fox.svg'; 
-import OrigamiFrog from '../origami/frog.svg'; 
+import OrigamiFox from '../origami/021-fox.svg'; 
+import OrigamiFrog from '../origami/017-frog.svg'; 
+import OrigamiPlane from '../origami/plane.svg'; 
+import OrigamiFold from '../origami/origami.svg'; 
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
+import Avatar from "@material-ui/core/Avatar";
+import { Link } from 'react-router-dom'
 
 export class Login extends React.Component { 
     render() {
         return(
             <>
-                <div className = "container"> 
-                    {/* <ReadingRoomLogo/> */}
+                <div className = "containerpurple"> 
                     <img
                         src={Logo}
                         style={{ height: 300, width: 400 }}
                         alt="website logo"
                     />
                     <div class = "login"> 
-                    <Grid container spacing={2}>
+                    <Grid container spacing={4}>
                         <Grid item xs = {2}> 
                         <img
                             src={OrigamiFox}
@@ -36,8 +38,6 @@ export class Login extends React.Component {
                             <TextField id="outlined-basic" label="username" variant="outlined" 
                             inputProps={{style: { backgroundColor: 'white' }}} fullWidth/>
                         </Grid> 
-                        {/* <Grid item xs = {3}>
-                        </Grid>  */}
                         <Grid item xs = {2}>
                         <img
                             src={OrigamiFrog}
@@ -49,13 +49,24 @@ export class Login extends React.Component {
                             <TextField id="outlined-basic" label="password" variant="outlined" 
                             inputProps={{style: { backgroundColor: 'white' }}} fullWidth/>
                         </Grid> 
-                        {/* <Grid item xs = {3}>
-                        </Grid>  */}
                         <Grid item xs = {12}> 
-                        <Button variant="contained">Login</Button> 
+                        <Link to="/home">
+                            <Button
+                                variant="contained"
+                                // color = "secondary"
+                                startIcon={<Avatar src={OrigamiPlane}/>}>
+                                    LOG IN 
+                            </Button>
+                        </Link>
                         </Grid> 
                         <Grid item xs = {12}>
-                        <Button variant="contained">Signup</Button>
+                        <Button
+                            variant="contained"
+                            // color = "secondary"
+                            startIcon={<Avatar src={OrigamiFold}/>}>
+                                SIGN UP
+                            
+                        </Button>
                         </Grid> 
                     </Grid> 
                     </div> 
