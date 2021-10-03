@@ -221,7 +221,7 @@ def check_credentials(username, password):
     cursor.execute("USE readingRoomDB;")
 
     # Check if the username and passwords are equal
-    cursor.execute("SELECT password FROM userInfo WHERE username = '" + username + "';")
+    cursor.execute("SELECT password FROM user WHERE username = '" + username + "';")
     fetch = cursor.fetchall()
     if len(fetch) == 0:
         print("Username not in database")
@@ -240,7 +240,14 @@ def check_credentials(username, password):
     return returnVal
 
 
-def add_credentials(username, password):
+def role_id(role):
+    if role.to_lower() == 'student':
+        return 1
+    if role.to_lower() == 'teacher':
+        return 2 
+
+
+def add_credentials(username, password, role):
     """
     Adds the given credentials to the database
 
@@ -266,7 +273,7 @@ def add_credentials(username, password):
     cursor.execute("USE readingRoomDB;")
 
     # Add the username and passwork to the userInfo database
-    cursor.execute("INSERT INTO userInfo (ID, username, password) VALUES (" + str(int(cursor.execute("SELECT LAST_INSERT_ID() FROM userInfo"))) + ", '" + username + "', '" + password + "');")
+    cursor.execute("INSERT INTO user (username, password, role_id) VALUES ('" + username + "', '" + password + "', " + role_id(role) + ");")
     
     
     # Save and close the changes
@@ -276,7 +283,7 @@ def add_credentials(username, password):
     return True
 
 
-def add_recording(uploader, JSON_filename, audio_filename):
+def add_recording(user_id, JSON_filename, audio_filename, bookImage, bookTitle):
     """
     Adds data about an audiofile to the database
 
@@ -316,7 +323,8 @@ def add_recording(uploader, JSON_filename, audio_filename):
         else:
             s.append(JSONF[i])
     s = ''.join(s)
-    cursor.execute("""INSERT INTO recordings (ID, uploader, JSON_info, filename) VALUES (%d, '%s', '%s', '%s');"""%(int(cursor.execute("SELECT LAST_INSERT_ID() FROM recordings")), uploader, s, audio_filename))
+    cursor.execute("INSERT INTO recording(user_id, JSON_info, filename, bookImage, bookTitle) VALUES (" + user_id + "," + s + "," + audio_filename + ",'" + bookImage + "'," + bookTitle + "');")
+    #cursor.execute("""INSERT INTO recordings (ID, uploader, JSON_info, filename) VALUES (%d, '%s', '%s', '%s');"""%(int(cursor.execute("SELECT LAST_INSERT_ID() FROM recordings")), uploader, s, audio_filename))
 
 
     # Save and close the changes
@@ -351,21 +359,109 @@ def get_JSON_Data(audio_filename):
     cursor.execute("USE readingRoomDB;")
 
     # Get the data
-    cursor.execute("SELECT JSON_info FROM recordings WHERE filename = '" + audio_filename + "';")
+    cursor.execute("SELECT JSON_info FROM recording WHERE filename = '" + audio_filename + "';")
     JSON_data = cursor.fetchall()
     if len(JSON_data) == 0:
         return -1
     return JSON_data
     
+def join_class(user_id, class_id): 
+    """
+    Joins a user into a class and stores it in the enrollment table 
+    :param user_id: the user_id of the student
+    :param class_id: the class_id of the class
+    """
+
+    masterUsername = 'admin'
+    masterPass = 'dJL8n2kLGFDf6L4xtBex'
+    endpoint = 'hackdfw-2021-db.cra1ktdcyijt.us-east-2.rds.amazonaws.com'
+
+    # Connect to the database and create a cursor
+    try:
+        db = pymysql.connect(host=endpoint, user=masterUsername, password=masterPass)
+    except:
+        print("Unable to connect to database")
+        exit()
+    cursor = db.cursor()
+
+    # Use the readingRoomDB database
+    cursor.execute("USE readingRoomDB;")
+
+    # Get the data
+    cursor.execute("INSERT INTO enrollment (user_id, class_id) VALUES (" + user_id + "," + class_id + ");")
+
+    db.commit()
+    cursor.close()
+    db.close()
+    return True
+
+def get_classes(user_id): 
+    """
+    Gets all the classes for a specific user
+    :param user_id: the user_id of the user
+    """
+
+    masterUsername = 'admin'
+    masterPass = 'dJL8n2kLGFDf6L4xtBex'
+    endpoint = 'hackdfw-2021-db.cra1ktdcyijt.us-east-2.rds.amazonaws.com'
+
+    # Connect to the database and create a cursor
+    try:
+        db = pymysql.connect(host=endpoint, user=masterUsername, password=masterPass)
+    except:
+        print("Unable to connect to database")
+        exit()
+    cursor = db.cursor()
+
+    # Use the readingRoomDB database
+    cursor.execute("USE readingRoomDB;")
+
+    # Get the data
+    cursor.execute("SELECT class_id FROM enrollment WHERE user_id = " + user_id + ");")
+
+    classes = cursor.fetchall()
+    if len(classes) == 0:
+        return -1
+    return classes
+
+def get_recordings(class_id): 
+    """
+    Gets all the recordings for a specific class
+    :param class_id: the class_id of the class 
+    """
+
+    masterUsername = 'admin'
+    masterPass = 'dJL8n2kLGFDf6L4xtBex'
+    endpoint = 'hackdfw-2021-db.cra1ktdcyijt.us-east-2.rds.amazonaws.com'
+
+    # Connect to the database and create a cursor
+    try:
+        db = pymysql.connect(host=endpoint, user=masterUsername, password=masterPass)
+    except:
+        print("Unable to connect to database")
+        exit()
+    cursor = db.cursor()
+
+    # Use the readingRoomDB database
+    cursor.execute("USE readingRoomDB;")
+
+    # Get the data
+    cursor.execute("SELECT class_id FROM enrollment WHERE user_id = " + user_id + ");")
+
+    classes = cursor.fetchall()
+    if len(classes) == 0:
+        return -1
+    return classes
+
 
 
 
 
 
 """ Some tests can be found below """
-#transcribe_audio('test2.mp3', 'test2_trans.json')
-#upload_recording('test2.mp4')
-#add_credentials("b", "a")
-#print(check_credentials("b", "a"))
-#add_recording("bob", "../test2_trans.json", "../test2.mp3")
-#print(get_JSON_Data("../test2.mp2"))
+# transcribe_audio('test2.mp3', 'test2_trans.json')
+# upload_recording('test2.mp4')
+# add_credentials("b", "a")
+# print(check_credentials("b", "a"))
+# add_recording("bob", "../test2_trans.json", "../test2.mp3", "url", "book")
+# print(get_JSON_Data("../test2.mp2"))
