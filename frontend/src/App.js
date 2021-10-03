@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'; 
-import {LoginPage, CreatePage, HomePage} from './pages'; 
+import React from 'react'; 
+import {LoginPage, CreatePage, HomePage, RecordPage} from './pages'; 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App()
@@ -10,6 +10,7 @@ function App()
           <Switch> 
             <Route path="/home" component={HomePage}/>
             <Route path='/create' component={CreatePage}/>
+            <Route path='/record' component={RecordPage}/>
             <Route path="/" component={LoginPage}/>
           </Switch>
           </Router> 

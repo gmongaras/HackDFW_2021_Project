@@ -1,8 +1,6 @@
 html, #root, .App, body{
   margin: 0;
   padding: 0;
-  min-height:100vw;
-  height: 100vh;
   overflow: auto;
   background-color: #6F69AC;
 }
@@ -12,6 +10,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Press Start 2P', cursive, 'Roboto';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 2rem 2rem 0 2rem;
+
 }
 
 code {
