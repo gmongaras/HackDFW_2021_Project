@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'; 
 import {Homepage} from './pages/homepage'; 
-import {Login} from './pages/login'; 
+import {Login, CreatePage} from './pages'; 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App()
@@ -10,7 +10,7 @@ function App()
         <Router>
           <Switch> 
             <Route path="/home" component={Homepage}/>
-            <Route path="/login" component={Login}/>
+            <Route path='/create' component={CreatePage}/>
             <Route path="/" component={Login}/>
           </Switch>
           </Router> 
